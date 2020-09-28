@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.dao.EmployeeMapper">
+
+    <!-- 查询 -->
+    <select id="getAll" resultMap="getEmployee">
+        select * from employee
+    </select>
+    <select id="getDepart" resultType="com.cn.vo.Department">
+        select * from department
+    </select>
+    <select id="getbyId" resultMap="getEmployee">
+        select * from employee where eid = #{0}
+    </select>
+    <select id="getAllbyDepartment" resultMap="getEmployee">
+        select employee.* from employee,department where employee.depid=department.depid and department.depname=#{0}
+    </select>
+
+    <!-- 四种不同形式的多参数传入 -->
+    <select id="selectone_1" resultMap="getEmployee">
+  select * from employee where eage = #{param1} and esex = #{param2}
+  </select>
+    <select id="selectone_2" resultMap="getEmployee">
+  select * from employee where eage = #{age} and esex = #{sex}
+  </select>
+    <select id="selectone_3" resultMap="getEmployee">
+  select * from employee where eage = #{age} and esex = #{sex}
+  </select>
+    <select id="selectone_4" resultMap="getEmployee">
+  select * from employee where eage = #{eage} and esex = #{esex}
+  </select>
+    <!--                    插入                    -->
+    <insert id="insert" parameterType="com.cn.vo.Employee" >
+  INSERT into employee(eid,ename,esex,eage,depid) VALUES(#{eid},#{ename},#{esex},#{eage},#{department.depid})
+  </insert>
+
+    <insert id="inset_department">
+  INSERT into department(depid,depname) VALUES(#{depid},#{depname})
+  </insert>
+    <insert id="insert_more" parameterType="java.util.List">
+        insert into employee(eid,ename,esex,eage,depid) values
+        <foreach collection="list" index="index" separator="," item="item">
+            (#{item.eid},#{item.ename},#{item.esex},#{item.eage},#{item.department.depid})
+        </foreach>
+    </insert>
+
+    <!--                    删除                    -->
+    <delete id="delet" parameterType="com.cn.vo.Employee">
+  DELETE FROM employee WHERE eid = #{eid}
+  </delete>
+    <delete id="deletbyDepid" parameterType="int">
+  DELETE FROM employee WHERE depid = #{0}
+  </delete>
+    <delete id="delet_more" parameterType="java.util.List">
+        delete from employee where eid in
+        <foreach collection="list" open="(" close=")" item="item" separator=",">
+            #{item.eid}
+        </foreach>
+    </delete>
+    <delete id="delet_dep">
+  DELETE FROM department WHERE depname = #{0}
+  </delete>
+
+
+    <!--                    修改                    -->
+    <update id="update" parameterType="com.cn.vo.Employee">
+  UPDATE employee SET  ename = #{ename} where eid = #{eid}
+  </update>
+    <update id="update_more"  parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update employee
+            <set>
+                ename=#{item.ename}
+            </set>
+            where eid = #{item.eid}
+        </foreach>
+    </update>
+
+    <!--                    删除表                    -->
+    <update id="truncateTable">
+  TRUNCATE TABLE #{0};
+  </update>
+    <!--                    resultMap                    -->
+    <resultMap id="getEmployee" type="com.cn.vo.Employee">
+        <result property="eid" column="eid"></result>
+        <result property="ename" column="ename"></result>
+        <result property="eage" column="eage"></result>
+        <result property="esex" column="esex"></result>
+        <association property="department" column="depid" javaType="com.cn.vo.Department" select="getDepartment"></association>
+    </resultMap>
+
+    <!--                    resultmap中调用的SQL语句，在接口中未定义                    -->
+    <select id="getDepartment" resultType="com.cn.vo.Department">
+        select * from department where depid = #{tid}
+    </select>
+</mapper>
