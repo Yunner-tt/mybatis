@@ -17,15 +17,14 @@ import java.util.List;
 import java.util.Map;
 
 public class test {
-    public InputStream inputStream;
     public SqlSessionFactory sqlSessionFactory;
     public SqlSession session;
     public EmployeeMapper testUser;
 
     @Before
     public void Init() throws IOException {
-        inputStream = Resources.getResourceAsStream("mybatis.xml");
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        InputStream inputStream = Resources.getResourceAsStream("mybatis.xml");//Resources为mybatis的工具类，用来
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
         session = sqlSessionFactory.openSession(true);
         testUser = session.getMapper(EmployeeMapper.class);
     }
