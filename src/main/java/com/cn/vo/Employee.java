@@ -63,7 +63,7 @@ public class Employee {
                 ", eage=" + eage +
                 ", ename='" + ename + '\'' +
                 ", esex='" + esex + '\'' +
-                ", department=" + department +
+                ", department=" + department.getDepname() +
                 '}';
     }
 }

@@ -35,6 +35,16 @@ public class test {
     }
 
     @Test
+    public void testss(){
+        System.out.println("-----------------------------------------");
+        List<Department> ls = new ArrayList<Department>();
+        ls = testUser.getDepart();
+        for ( Department tmp : ls) {
+            System.out.println(tmp);
+        };
+    }
+
+    @Test
     public void test_selectAll() {
         System.out.println("------------------------查询全部员工--------------------------------------");
         List<Employee> ss = new ArrayList<Employee>();
@@ -174,7 +184,7 @@ public class test {
     /*这里没有做service层，但是因为需要完成级联删除等等，所以在这里临时建立几个函数充当service的功能。*/
     public void cascadingDelete(Department department) {//级联删除，检查employee，如果
         List<Employee> ls = new ArrayList<Employee>();
-        ls = testUser.getAllbyDepartment(department.getDepname());
+        ls = testUser.getAllbyDepartment(department.getDepname());//新增加了getdepart()可以在获取所有部门的同时，获取到该部门下所有的员工
         if (ls.isEmpty()) testUser.delet_dep(department.getDepname());
         else {
             testUser.delet_more(ls);

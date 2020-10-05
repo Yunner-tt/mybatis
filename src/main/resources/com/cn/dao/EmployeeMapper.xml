@@ -8,8 +8,8 @@
     <select id="getAll" resultMap="getEmployee">
         select * from employee
     </select>
-    <select id="getDepart" resultType="com.cn.vo.Department">
-        select * from department
+    <select id="getDepart" resultMap="getDepartments">
+        select * from department, employee where department.depid=employee.depid
     </select>
     <select id="getbyId" resultMap="getEmployee">
         select * from employee where eid = #{0}
@@ -72,7 +72,16 @@
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
             update employee
             <set>
-                ename=#{item.ename}
+                eid=#{item.eid}
+                <if test="item.ename != null and item.ename != ''">
+                    ,ename=#{item.ename}
+                </if>
+                <if test="item.eage != null and item.eage != ''">
+                    ,eage=#{item.eage}
+                </if>
+                <if test="item.esex != null and item.esex != ''">
+                    ,esex=#{item.esex}
+                </if>
             </set>
             where eid = #{item.eid}
         </foreach>
@@ -83,8 +92,21 @@
   TRUNCATE TABLE #{0};
   </update>
     <!--                    resultMap                    -->
-    <resultMap id="getEmployee" type="com.cn.vo.Employee">
-        <result property="eid" column="eid"></result>
+    <resultMap id="getDepartments" type="com.cn.vo.Department">
+        <id property="depid" column="depid"></id>
+        <result property="depname" column="depname"></result>
+        <collection property="employees" ofType="com.cn.vo.Employee">
+            <id property="eid" column="eid"></id>
+            <result property="ename" column="ename"></result>
+            <result property="eage" column="eage"></result>
+            <result property="esex" column="esex"></result>
+            <association property="department" column="depid" javaType="com.cn.vo.Department" select="getDepartment"></association>
+        </collection>
+    </resultMap>
+
+
+    <resultMap id="getEmployee" type="com.cn.vo.Employee"><!-- property是实体类中属性, cloumn是数据库中属性名 -->
+        <id property="eid" column="eid"></id>
         <result property="ename" column="ename"></result>
         <result property="eage" column="eage"></result>
         <result property="esex" column="esex"></result>
