@@ -4,6 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
+
   <environments default="development">
     <environment id="development">
       <transactionManager type="JDBC"/>
@@ -18,5 +19,6 @@
   
   <mappers>
     <package name="com.cn.dao"/>
+    <!-- <mapper resource="xxx.xml"/> 用来指定支援配置文件 -->
   </mappers>
 </configuration>

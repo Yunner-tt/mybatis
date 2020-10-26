@@ -36,9 +36,9 @@ public class test {
     @Test
     public void testss(){
         System.out.println("-----------------------------------------");
-        List<Department> ls = new ArrayList<Department>();
-        ls = testUser.getDepart();
-        for ( Department tmp : ls) {
+        List<Employee> ls = new ArrayList<Employee>();
+        ls = testUser.getAllbyDepartment("技术部门");
+        for ( Employee tmp : ls) {
             System.out.println(tmp);
         };
     }
